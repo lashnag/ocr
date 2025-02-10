@@ -17,5 +17,6 @@ class ImageRequest(BaseModel):
 def image_to_text(request: ImageRequest):
     image_data = base64.b64decode(request.base64Image)
     image = Image.open(BytesIO(image_data))
-    text = pytesseract.image_to_string(image)
-    return JSONResponse(content={'text': text})
+    rus_text = pytesseract.image_to_string(image, "rus")
+    eng_text = pytesseract.image_to_string(image, "eng")
+    return JSONResponse(content={'ruText': rus_text, 'enText': eng_text})
