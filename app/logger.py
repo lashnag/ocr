@@ -2,7 +2,10 @@ import logging
 import json
 import os
 import traceback
+import contextvars
 from logstash_async.handler import AsynchronousLogstashHandler
+
+request_headers = contextvars.ContextVar('request_headers')
 
 def is_prod_mode():
     if os.getenv('PROD_MODE') is not None:
@@ -37,5 +40,11 @@ class JsonFormatter(logging.Formatter):
         }
         if record.exc_info:
             log_obj['exception'] = ''.join(traceback.format_exception(*record.exc_info))
+
+        headers = request_headers.get(None)
+        if isinstance(headers, dict):
+            for key, value in headers.items():
+                if key.startswith('custom-'):
+                    log_obj[key.removeprefix('custom-')] = value
 
         return json.dumps(log_obj)

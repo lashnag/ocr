@@ -2,24 +2,22 @@ import pytesseract
 import base64
 import logging
 import re
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from io import BytesIO
 from PIL import Image
-from logger import init_logger
+from logger import init_logger, request_headers
 
 init_logger()
 logging.getLogger().info("OCR run")
 server = FastAPI()
 
-class ImageRequest(BaseModel):
-    base64Image: str
-
 @server.post("/image-to-text")
-def image_to_text(request: ImageRequest):
+async def image_to_text(request: Request):
+    request_headers.set(dict(request.headers))
     try:
-        image_data = base64.b64decode(request.base64Image)
+        body = await request.json()
+        image_data = base64.b64decode(body.get("base64Image"))
         image = Image.open(BytesIO(image_data))
         rus_text = clean_text_russian(pytesseract.image_to_string(image, "rus"))
         eng_text = clean_text_english(pytesseract.image_to_string(image, "eng"))
