@@ -26,6 +26,10 @@ async def image_to_text(request: Request):
         logging.getLogger().error(f"Common error: {error}", exc_info=True)
         raise HTTPException(status_code=500, detail="Произошла ошибка при обработке изображения")
 
+@server.get("/healthcheck")
+async def healthcheck():
+    return {"status": "ok"}
+
 def clean_text_russian(text):
     text = re.sub(r'[^а-яА-ЯёЁ0-9\s,._!?«»–-]', '', text)
     text = re.sub(r'\s+', ' ', text)
