@@ -9,10 +9,10 @@ request_headers = contextvars.ContextVar('request_headers')
 
 def is_remote_log():
     if os.getenv('REMOTE_LOGGER') is not None:
-        logging.getLogger().info("Production mode")
+        logging.getLogger().info("Remote logger")
         return True
     else:
-        logging.getLogger().info("Developer mode")
+        logging.getLogger().info("Local logger")
         return False
 
 def init_logger():
