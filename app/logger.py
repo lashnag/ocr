@@ -22,15 +22,15 @@ def init_logger():
         host='logstash',
         port=5022,
         database_path=None,
-    ) if is_remote_log() else logging.StreamHandler(sys.stdout)
+    ) if is_remote_logger() else logging.StreamHandler(sys.stdout)
     handler.setFormatter(JsonFormatter())
     logging.basicConfig(
-        level=logging.INFO if is_remote_log() else logging.DEBUG,
+        level=logging.INFO if is_remote_logger() else logging.DEBUG,
         datefmt = "%Y-%m-%d %H:%M:%S",
         handlers = [handler]
     )
 
-    logging.getLogger().info(f"Prod mode: {is_remote_log()}")
+    logging.getLogger().info(f"Prod mode: {is_remote_logger()}")
 
 class JsonFormatter(logging.Formatter):
     def format(self, record):
