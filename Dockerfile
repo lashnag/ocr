@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /ocr
 
-CMD ["sh", "-c", "cd app; uvicorn main:server --host 0.0.0.0 --port 4366 --workers 4"]
+CMD ["sh", "-c", "cd app; uvicorn main:server --host 0.0.0.0 --port 4366 --workers 1"]
