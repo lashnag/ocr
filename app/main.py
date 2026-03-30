@@ -24,7 +24,7 @@ async def image_to_text(request: Request):
         return JSONResponse(content={'ruText': rus_text, 'enText': eng_text})
     except Exception as error:
         logging.getLogger().error(f"Common error: {error}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Произошла ошибка при обработке изображения")
+        raise HTTPException(status_code=500, detail=f"Error: {error}")
 
 @server.get("/healthcheck")
 async def healthcheck():
